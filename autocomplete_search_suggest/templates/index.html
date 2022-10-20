@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NA Search</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script>
+function suggest(inputString){
+    if(inputString.length == 0) {
+        $('#suggestions').fadeOut();
+    } else {
+        $('#cari').addClass('load');
+        $.post("/ajaxpost", {queryString: ""+inputString+""}, function(data){
+                $('#suggestions').fadeIn();
+                $('#suggestionsList').html(data);
+                $('#suggestionsList').append(data.htmlresponse);
+                $('#cari').removeClass('load');
+        });
+  }
+}
+function fill(thisValue) {
+  $('#cari').val(thisValue);
+  setTimeout("$('#suggestions').fadeOut();", 600);
+}
+</script>
+<style>
+#cari {
+ width:730px;
+ padding:10px;
+ margin: 5px;
+ font-size:110%;
+ border-radius: 25px;
+ vertical-align:middle;
+}
+.suggestionsBox {
+ width: 730px;
+ color: #fff;
+ text-align: justify;
+ margin:0 px;
+ padding:0;
+ background:#86BAC7;
+ top:0;
+ left:0;
+}
+.suggestionList {
+ margin: 0px;
+ padding: 0px;
+}
+.suggestionList ul li {
+ list-style:none;
+ margin: 0px;
+ padding: 6px;
+ border-bottom:1px dotted #98BE56;
+ cursor: pointer;
+}
+.suggestionList ul li:hover {
+ background-color: #006E89;
+ color:#000;text-align: left;
+}
+ul {
+ font-family:Arial, Helvetica, sans-serif;
+ font-size:20px;
+ color:#FFF;
+ padding:0;
+ margin:0;
+}
+.load{
+background-image:url(img/loader.gif);
+background-position:right;
+background-repeat:no-repeat;
+}
+#suggest {
+ position:relative;
+}
+.sf_active{
+ border:2px #8BB544 solid;
+ background:#fff;
+ color:#333;
+}
+</style>
+</head>
+<body>
+<center>
+<p><h2>NA SEARCH</h2></p>
+    <img width="60%" height="30%"  src="{{url_for('static', filename='search.png')}}">
+    <br>
+<form id="form" action="#">
+        <input type="text" size="25" value="" id="cari" onkeyup="suggest(this.value);" onblur="fill();" class="sf_active" />
+        <div class="suggestionsBox" id="suggestions">
+            <div class="suggestionList" id="suggestionsList">   </div>
+        </div>
+    </div>
+</div>
+</center>
+</form>
+</body>
+</html>
